@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Time tracker</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      background: #212121;
+      display: flex;
+      justify-content:center;
+      align-items: center;
+      font-family: monospace;
+      font-size: 12vmin;
+    }
+
+    .time {
+      color: hsl(120, 65%, 65%);
+    }
+  </style>
+</head>
+<body>
+  <div class="time" id="time">00:00:00.00</div>
+  <script>
+    var current = Number(localStorage.getItem('time')) || 0
+    var element = document.getElementById('time')
+    var time = 0
+    var ONE_SECOND = 1000
+    var ONE_MINUTE = 60 * ONE_SECOND
+    var ONE_HOUR = 60 * ONE_MINUTE
+
+    function tick (t) {
+      current += Math.floor(t - time)
+      time = t
+      format()
+      color()
+      requestAnimationFrame(tick)
+    }
+
+    function format () {
+      var h = Math.floor(current / ONE_HOUR)
+      var m = Math.floor((current - h * ONE_HOUR) / ONE_MINUTE)
+      var s = Math.floor((current - h * ONE_HOUR - m * ONE_MINUTE) / ONE_SECOND)
+      var ms = Math.floor((current - h * ONE_HOUR - m * ONE_MINUTE - s * ONE_SECOND) / 10)
+      
+      if (h < 10) h = `0${h}`
+      if (m < 10) m = `0${m}`
+      if (s < 10) s = `0${s}`
+      if (ms < 10) ms = `0${ms}`
+      
+      element.textContent = `${h}:${m}:${s}.${ms}`
+    }
+
+    function color () {
+      element.style.color = `hsl(${0.03125 * current % 360},65%,65%)`
+    }
+
+    function save () {
+      localStorage.setItem('time', current)
+    }
+
+    setInterval(save, ONE_SECOND)
+    requestAnimationFrame(tick)
+  </script>
+</body>
+</html>
