@@ -30,7 +30,7 @@
   <div class="time" id="time">00:00:00.00</div>
   <script>
     var key = location.hash.slice(1) || Math.random().toString(36).substring(2)
-    var current = Number(localStorage.getItem('time')) || 0
+    var current = Number(localStorage.getItem(`${key}-time`)) || 0
     var element = document.getElementById('time')
     var time = 0
     var ONE_SECOND = 1000
@@ -65,7 +65,7 @@
 
     function save () {
       location.hash = key
-      localStorage.setItem('time', current)
+      localStorage.setItem(`${key}-time`, current)
     }
 
     setInterval(save, ONE_SECOND)
