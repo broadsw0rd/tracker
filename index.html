@@ -29,6 +29,7 @@
 <body>
   <div class="time" id="time">00:00:00.00</div>
   <script>
+    var key = location.hash.slice(1) || Math.random().toString(36).substring(2)
     var current = Number(localStorage.getItem('time')) || 0
     var element = document.getElementById('time')
     var time = 0
@@ -63,6 +64,7 @@
     }
 
     function save () {
+      location.hash = key
       localStorage.setItem('time', current)
     }
 
